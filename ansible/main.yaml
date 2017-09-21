@@ -1,8 +1,10 @@
 ---
+# mangler login
 - hosts: OCPmasters
   remote_user: jborella
   vars:
     app_name: hello-world
+    webhook_secret: secret1234
   tasks:
   - name: Create project
     oc_project:
