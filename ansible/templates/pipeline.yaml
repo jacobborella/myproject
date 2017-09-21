@@ -10,7 +10,6 @@ spec:
   - type: Generic
     generic:
       secret: secret101
-spec:
   strategy:
     type: "JenkinsPipeline"
     jenkinsPipelineStrategy:
