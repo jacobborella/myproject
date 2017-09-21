@@ -1,0 +1,24 @@
+---
+- hosts: OCPmasters
+  remote_user: jborella
+  tasks:
+  - name: Create project
+    oc_project:
+      name: ansibletestproject
+      state: present
+  - name: Create app
+    oc_app:
+      name: hello-world
+      namespace: ansibletestproject
+      git-repo: https://github.com/openshift/cakephp-ex.git
+      state: present
+  - name: Create template file
+    template:
+      src: templates/openjdk.json
+      dest: /tmp/openjdk.json
+      mode: 0644
+  - name: Apply template
+    oc_template:
+      namespace: ansibletestproject
+      filename: /tmp/openjdk.json
+      state: present
