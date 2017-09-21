@@ -8,6 +8,6 @@ spec:
     jenkinsPipelineStrategy:
       jenkinsfile: |-
         node {
-          openshiftBuild bldCfg: 'hello-world'
-          openshiftVerifyBuild bldCfg: 'hello-world'
+          openshiftBuild bldCfg: '{{ app_name }}'
+          openshiftVerifyBuild bldCfg: '{{ app_name }}'
         }

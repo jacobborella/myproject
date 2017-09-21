@@ -1,6 +1,8 @@
 ---
 - hosts: OCPmasters
   remote_user: jborella
+  vars:
+    app_name: hello-goto
   tasks:
   - name: Create project
     oc_project:
@@ -8,17 +10,28 @@
       state: present
   - name: Create app
     oc_app:
-      name: hello-world
+      name: "{{ app_name }}"
       namespace: ansibletestproject
       git-repo: https://github.com/openshift/cakephp-ex.git
       state: present
-  - name: Create template file
+  - name: Create OpenJDK template file
     template:
       src: templates/openjdk.json
       dest: /tmp/openjdk.json
       mode: 0644
-  - name: Apply template
+  - name: Create pipeline template file
+    template:
+      src: templates/pipeline.yaml
+      dest: /tmp/pipeline.yaml
+      mode: 0644
+  - name: Apply OpenJDK template
     oc_template:
       namespace: ansibletestproject
       filename: /tmp/openjdk.json
       state: present
+  - name: Apply pipeline template
+    oc_template:
+      namespace: ansibletestproject
+      filename: /tmp/pipeline.yaml
+      state: present
+
