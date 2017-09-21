@@ -2,7 +2,7 @@
 - hosts: OCPmasters
   remote_user: jborella
   vars:
-    app_name: hello-goto
+    app_name: hello-world
   tasks:
   - name: Create project
     oc_project:
