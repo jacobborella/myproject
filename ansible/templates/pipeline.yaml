@@ -2,6 +2,8 @@ kind: "BuildConfig"
 apiVersion: "v1"
 metadata:
   name: "test-pipeline"
+labels:
+  template-version: 1.0.0
 spec:
   triggers:
   - type: GitHub
@@ -17,4 +19,5 @@ spec:
         node {
           openshiftBuild bldCfg: '{{ app_name }}'
           openshiftVerifyBuild bldCfg: '{{ app_name }}'
+          sh 'echo change applied'
         }
