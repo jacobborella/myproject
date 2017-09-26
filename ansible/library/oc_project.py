@@ -19,6 +19,7 @@ def main():
     response = {}
 
     #decide whether project exists
+    #use oc get project ansibletestproject -o yaml instead and decide if there are changes as well
     proc = Popen(['oc', 'project', module.params['name']], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     proc.communicate()
     project_exists = proc.returncode

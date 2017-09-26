@@ -9,6 +9,8 @@
   - name: Create project
     oc_project:
       name: ansibletestproject
+      displayName: GOTO Ansible Demo
+      description: Demo of using Ansible for provisioning servers
       state: present
   - name: Create app
     oc_app:
