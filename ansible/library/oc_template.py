@@ -35,6 +35,7 @@ def main():
     if 'present' == module.params['state']:
       #extract new template version
       newTemplateVersion = md5(module.params['filename'])
+      response['new-template-version'] = newTemplateVersion
       if exists:
         #investigate whether the template has changed since last time if it exists
         proc = Popen(['oc', 'get', '-f', module.params['filename'], '-o', 'yaml', '-n', module.params['namespace']], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -50,7 +51,7 @@ def main():
         if oldTemplateVersion != newTemplateVersion:
           proc = Popen(['oc', 'apply', '-f', module.params['filename'], '-n', module.params['namespace']], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
           stdout, stderr = proc.communicate()
-          proc = Popen(['oc', 'label', '-f', module.params['filename'], '-n', module.params['namespace'], 'template-version=' + str(newTemplateVersion)], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+          proc = Popen(['oc', 'label', '-f', module.params['filename'], '-n', module.params['namespace'], 'template-version=' + str(newTemplateVersion), '--overwrite=true'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
           stdout, stderr = proc.communicate()
           changed = True
       else: 
