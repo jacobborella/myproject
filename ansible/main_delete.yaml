@@ -1,0 +1,15 @@
+---
+# mangler login
+- hosts: OCPmasters
+  remote_user: jborella
+  vars:
+    app_name: hello-world
+    webhook_secret: secret1234
+  tasks:
+  - name: Delete project
+    oc_project:
+      name: ansibletestproject
+      displayName: GOTO Ansible Demo
+      description: Demo of using Ansible for provisioning servers
+      state: absent
+

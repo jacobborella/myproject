@@ -11,6 +11,16 @@ def md5(fname):
             hash_md5.update(chunk)
     return hash_md5.hexdigest()
 
+def getTemplate(templateName, namespace, format=None):
+    if format is None:
+      proc = Popen(['oc', 'get', '-f', templateName, '-n', namespace], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    else:
+      proc = Popen(['oc', 'get', '-f', templateName, '-n', namespace, '-o', format], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    stdout, stderr = proc.communicate()
+    exists = proc.returncode == 0
+    return exists, stdout, stderr
+
+
 def main():
     fields = {
         "filename": {"required": True, "type": "str"},
@@ -27,11 +37,9 @@ def main():
     changed = False
 
     #investigate whether the template already exists
-    proc = Popen(['oc', 'get', '-f', module.params['filename'], '-n', module.params['namespace']], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    stdout, stderr = proc.communicate()
-    exists = proc.returncode == 0
+    exists, stdout, stderr = getTemplate(module.params['filename'], module.params['namespace'])
 
-    #if not and template must be there, create the template
+    #if template must be there, create or update it
     if 'present' == module.params['state']:
       #extract new template version
       newTemplateVersion = md5(module.params['filename'])
@@ -63,6 +71,9 @@ def main():
           changed = True
         else:
           module.fail_json(msg=stdout)
+      #finally return new values, which are relevant
+      exists, stdout, stderr = getTemplate(module.params['filename'], module.params['namespace'], 'yaml')
+      response['selfLink'] = yaml.load(stdout)['metadata']['selfLink']
 
     if 'absent' == module.params['state'] and exists:
       proc = Popen(['oc', 'delete', '-f', module.params['filename'], '-n', module.params['namespace']], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)

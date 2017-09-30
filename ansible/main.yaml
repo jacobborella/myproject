@@ -5,7 +5,11 @@
   vars:
     app_name: hello-world
     webhook_secret: secret1234
+    gituser: jacobborella
   tasks:
+  - name: Include secret vars
+    include_vars:
+      file: secret.yaml
   - name: Create project
     oc_project:
       name: ansibletestproject
@@ -32,10 +36,17 @@
     oc_template:
       namespace: ansibletestproject
       filename: /tmp/openjdk.json
-      state: present
+      state: absent
   - name: Apply pipeline template
     oc_template:
       namespace: ansibletestproject
       filename: /tmp/pipeline.yaml
       state: present
-
+    register: result
+  - name: Setup git
+    github_hooks:
+      action: create
+      hookurl: https://li1645-194.members.linode.com:8443{{result.meta.selfLink}}/webhooks/webhook_secret/github
+      user: '{{ gituser }}'
+      oauthkey: '{{ oauthkey }}'
+      repo: https://api.github.com/repos/jacobborella/myproject
