@@ -1,1 +1,2 @@
 oauthkey: "{{ vault_oauthkey }}"
+secret_message: "{{ vault_secret_message }}"
