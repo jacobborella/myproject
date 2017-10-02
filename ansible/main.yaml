@@ -63,6 +63,15 @@
       key: GREETING
       value: Hello GOTO
       state: absent
+  - name: Mount secret application.properties for application
+    oc_volume:
+      name: "{{ app_name }}"
+      namespace: "{{ app_namespace }}"
+      resource: dc
+      vol-name: "vol01"
+      secret-name: "test-secret"
+      mount-path: "/data"
+      state: present
   - name: Set environment variable
     oc_env:
       name: "{{ app_name }}"
