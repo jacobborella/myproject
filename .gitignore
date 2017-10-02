@@ -57,3 +57,4 @@ pom.xml.tag
 
 #Ansible
 .vault_pass.txt
+ansible.cfg
