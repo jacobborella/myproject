@@ -7,8 +7,7 @@ import org.springframework.web.bind.annotation.*;
 @EnableAutoConfiguration
 public class Example {
 
-	@Value("${GREETING}")
-	private String greeting;
+	private String greeting = "Hello from Spring";
 	
     @RequestMapping("/")
     String home() {
