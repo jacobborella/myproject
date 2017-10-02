@@ -5,7 +5,6 @@
   vars:
     app_name: hello-world
     app_namespace: ansibletestproject
-    webhook_secret: secret1234
     gituser: jacobborella
   tasks:
   - name: Create project
@@ -63,7 +62,7 @@
       resource: dc
       key: GREETING
       value: Hello GOTO
-      state: present
+      state: absent
   - name: Set environment variable
     oc_env:
       name: "{{ app_name }}"
@@ -71,7 +70,7 @@
       resource: dc
       key: SPRING_CONFIG_LOCATION
       value: /data/application.properties
-      state: absent
+      state: present
   - name: Setup git
     github_hooks:
       action: create

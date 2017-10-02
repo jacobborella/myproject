@@ -1,2 +1,3 @@
 oauthkey: "{{ vault_oauthkey }}"
 secret_message: "{{ vault_secret_message }}"
+webhook_secret: "{{ vault_webhook_secret }}"
