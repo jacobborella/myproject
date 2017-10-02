@@ -4,7 +4,7 @@
   remote_user: jborella
   vars:
     app_name: hello-world
-    app_namespace: ansibletestproject
+    app_namespace: ansibledemo
     gituser: jacobborella
   tasks:
   - name: Create project
@@ -22,7 +22,7 @@
     - oc_template:
         namespace: "{{ app_namespace }}"
         filename: /tmp/secret.yaml
-        state: present
+        state: absent
     always:
     - file:
         path: /tmp/secret.yaml
@@ -71,7 +71,7 @@
       vol-name: "vol01"
       secret-name: "test-secret"
       mount-path: "/data"
-      state: present
+      state: absent
   - name: Set environment variable
     oc_env:
       name: "{{ app_name }}"
@@ -79,7 +79,7 @@
       resource: dc
       key: SPRING_CONFIG_LOCATION
       value: /data/application.properties
-      state: present
+      state: absent
   - name: Setup git
     github_hooks:
       action: create
