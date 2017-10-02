@@ -6,10 +6,10 @@ spec:
   triggers:
   - type: GitHub
     github:
-      secret: webhook_secret
+      secret: "{{ webhook_secret }}"
   - type: Generic
     generic:
-      secret: webhook_secret
+      secret: "{{ webhook_secret }}"
   strategy:
     type: "JenkinsPipeline"
     jenkinsPipelineStrategy:

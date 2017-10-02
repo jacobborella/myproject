@@ -9,6 +9,7 @@ public class Example {
 
 	@Value("${GREETING}")
 	private String greeting;
+	//touch
 	
     @RequestMapping("/")
     String home() {
