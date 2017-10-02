@@ -1,15 +1,16 @@
 ---
 # mangler login
-- hosts: OCPmasters
+- hosts: GOTOdemo
   remote_user: jborella
   vars:
     app_name: hello-world
+    app_namespace: ansibletestproject
     webhook_secret: secret1234
     gituser: jacobborella
   tasks:
   - name: Create project
     oc_project:
-      name: ansibletestproject
+      name: "{{ app_namespace }}"
       displayName: GOTO Ansible Demo
       description: Demo of using Ansible for provisioning servers
       state: present
@@ -20,7 +21,7 @@
         dest: /tmp/secret.yaml
         mode: 0600
     - oc_template:
-        namespace: ansibletestproject
+        namespace: "{{ app_namespace }}"
         filename: /tmp/secret.yaml
         state: present
     always:
@@ -34,7 +35,7 @@
       mode: 0644
   - name: Apply pipeline template
     oc_template:
-      namespace: ansibletestproject
+      namespace: "{{ app_namespace }}"
       filename: /tmp/pipeline.yaml
       state: present
     register: result
@@ -45,16 +46,32 @@
       mode: 0644
   - name: Apply openjdk template
     oc_template:
-      namespace: ansibletestproject
+      namespace: "{{ app_namespace }}"
       filename: /tmp/openjdk.json
       state: present
   - name: Create app
     oc_app:
       name: "{{ app_name }}"
-      namespace: ansibletestproject
+      namespace: "{{ app_namespace }}"
       template: openjdk18-web-basic-s2i
       template-parameters: SOURCE_REPOSITORY_URL=https://github.com/jacobborella/myproject.git,CONTEXT_DIR=,APPLICATION_NAME=hello-world
       state: present
+  - name: Set environment variable
+    oc_env:
+      name: "{{ app_name }}"
+      namespace: "{{ app_namespace }}"
+      resource: dc
+      key: GREETING
+      value: Hello GOTO
+      state: present
+  - name: Set environment variable
+    oc_env:
+      name: "{{ app_name }}"
+      namespace: "{{ app_namespace }}"
+      resource: dc
+      key: SPRING_CONFIG_LOCATION
+      value: /data/application.properties
+      state: absent
   - name: Setup git
     github_hooks:
       action: create

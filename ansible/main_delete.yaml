@@ -1,6 +1,6 @@
 ---
 # mangler login
-- hosts: OCPmasters
+- hosts: GOTOdemo
   remote_user: jborella
   vars:
     app_name: hello-world
