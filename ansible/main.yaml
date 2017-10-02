@@ -7,9 +7,6 @@
     webhook_secret: secret1234
     gituser: jacobborella
   tasks:
-  - name: Include secret vars
-    include_vars:
-      file: secret.yaml
   - name: Create project
     oc_project:
       name: ansibletestproject
@@ -22,21 +19,25 @@
       namespace: ansibletestproject
       git-repo: https://github.com/openshift/cakephp-ex.git
       state: present
-  - name: Create OpenJDK template file
-    template:
-      src: templates/openjdk.json
-      dest: /tmp/openjdk.json
-      mode: 0644
+  - name: Create secret in the project
+    block:
+    - template:
+        src: templates/secret.yaml
+        dest: /tmp/secret.yaml
+        mode: 0600
+    - oc_template:
+        namespace: ansibletestproject
+        filename: /tmp/secret.yaml
+        state: present
+    always:
+    - file:
+        path: /tmp/secret.yaml
+        state: absent
   - name: Create pipeline template file
     template:
       src: templates/pipeline.yaml
       dest: /tmp/pipeline.yaml
       mode: 0644
-  - name: Apply OpenJDK template
-    oc_template:
-      namespace: ansibletestproject
-      filename: /tmp/openjdk.json
-      state: absent
   - name: Apply pipeline template
     oc_template:
       namespace: ansibletestproject
