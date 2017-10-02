@@ -7,7 +7,9 @@ def main():
     fields = {
         "name": {"required": True, "type": "str"},
         "namespace": {"required": True, "type": "str"},
-        "git-repo": {"required": True, "type": "str" },
+        "git-repo": {"required": False, "type": "str" },
+        "template": {"required": False, "type": str},
+        "template-parameters": {"required": False, "type": "str"},
         "state": {
             "default": "present", 
             "choices": ['present', 'absent'],  
@@ -27,7 +29,21 @@ def main():
 
     if 'present' == module.params['state'] and not app_exists:
       #app doesn't exist, create it
-      proc = Popen(['oc', 'new-app', module.params['git-repo'], '-l', 'app=' + module.params['name'] ,'--name', module.params['name'], '-n', module.params['namespace']], stdout=subprocess.PIPE, stderr=subprocess.STDOUT) 
+      proc_values = ['oc', 'new-app']
+      if module.params['template'] is None:
+        proc_values.append(module.params['git-repo'])
+      else:
+        proc_values.append(module.params['template'])
+
+      if not(module.params['template-parameters'] is None):
+        templateParameters = module.params['template-parameters'].split(',')
+        for templateParameter in templateParameters:
+          proc_values.append('-p')
+          proc_values.append(templateParameter)
+
+
+      proc_values.extend(['-l', 'app=' + module.params['name'] ,'--name', module.params['name'], '-n', module.params['namespace']])
+      proc = Popen(proc_values, stdout=subprocess.PIPE, stderr=subprocess.STDOUT) 
       stdout, stderr = proc.communicate()
       if proc.returncode == 0:
         changed = True

@@ -13,12 +13,6 @@
       displayName: GOTO Ansible Demo
       description: Demo of using Ansible for provisioning servers
       state: present
-  - name: Create app
-    oc_app:
-      name: "{{ app_name }}"
-      namespace: ansibletestproject
-      git-repo: https://github.com/openshift/cakephp-ex.git
-      state: present
   - name: Create secret in the project
     block:
     - template:
@@ -44,6 +38,23 @@
       filename: /tmp/pipeline.yaml
       state: present
     register: result
+  - name: Create openjdk template file
+    template:
+      src: templates/openjdk.json
+      dest: /tmp/openjdk.json
+      mode: 0644
+  - name: Apply openjdk template
+    oc_template:
+      namespace: ansibletestproject
+      filename: /tmp/openjdk.json
+      state: present
+  - name: Create app
+    oc_app:
+      name: "{{ app_name }}"
+      namespace: ansibletestproject
+      template: openjdk18-web-basic-s2i
+      template-parameters: SOURCE_REPOSITORY_URL=https://github.com/jacobborella/myproject.git,CONTEXT_DIR=,APPLICATION_NAME=hello-world
+      state: present
   - name: Setup git
     github_hooks:
       action: create
