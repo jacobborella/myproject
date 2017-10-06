@@ -22,7 +22,7 @@
     - oc_template:
         namespace: "{{ app_namespace }}"
         filename: /tmp/secret.yaml
-        state: absent
+        state: present
     always:
     - file:
         path: /tmp/secret.yaml
@@ -71,7 +71,7 @@
       vol-name: "vol01"
       secret-name: "test-secret"
       mount-path: "/data"
-      state: absent
+      state: present
   - name: Set environment variable
     oc_env:
       name: "{{ app_name }}"
@@ -79,7 +79,7 @@
       resource: dc
       key: SPRING_CONFIG_LOCATION
       value: /data/application.properties
-      state: absent
+      state: present
   - name: Setup git
     github_hooks:
       action: create

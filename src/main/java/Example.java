@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 @EnableAutoConfiguration
 public class Example {
 
-	@Value("${GREETING: Hello Goto}")
+//	@Value("${GREETING: Hello DockerCon}")//show Red Hat/Yellow hat???
 	private String greeting = "Hello from Spring";
 	
     @RequestMapping("/")
