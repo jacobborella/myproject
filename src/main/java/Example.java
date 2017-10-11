@@ -14,15 +14,14 @@ import org.springframework.web.bind.annotation.*;
 @EnableAutoConfiguration
 public class Example {
 	
-	@Value("${HAT_COLOR:Red}")
+	@Value("${HAT_COLOR:Yellow}")
 	private String hatColor;
 
 	@RequestMapping("/")
 	public String home() {
 		return "Hello " + hatColor + " Hat!";
 	}
-	
-	
+		
     @RequestMapping(value = "/img", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
     public void getImage(HttpServletResponse response) throws IOException {
     	ClassPathResource imgFile = null;
