@@ -8,7 +8,7 @@
   tasks:
   - name: Delete project
     oc_project:
-      name: ansibletestproject
+      name: ansibledemo
       displayName: GOTO Ansible Demo
       description: Demo of using Ansible for provisioning servers
       state: absent

@@ -1,9 +1,9 @@
 ---
 # mangler login
 - hosts: GOTOdemo
-  remote_user: mglantz
+  remote_user: jborella
   vars:
-    ansible_ssh_user: mglantz
+    ansible_ssh_user: jborella
     app_name: hello-world
     app_namespace: ansibledemo
     gituser: jacobborella
@@ -23,7 +23,7 @@
     - oc_template:
         namespace: "{{ app_namespace }}"
         filename: /tmp/secret.yaml
-        state: present
+        state: absent
     always:
     - file:
         path: /tmp/secret.yaml
@@ -61,9 +61,9 @@
       name: "{{ app_name }}"
       namespace: "{{ app_namespace }}"
       resource: dc
-      key: GREETING
-      value: Hello GOTO
-      state: absent
+      key: HAT_COLOR
+      value: Yellow
+      state: present
   - name: Mount secret application.properties for application
     oc_volume:
       name: "{{ app_name }}"
@@ -72,7 +72,7 @@
       vol-name: "vol01"
       secret-name: "test-secret"
       mount-path: "/data"
-      state: present
+      state: absent
   - name: Set environment variable
     oc_env:
       name: "{{ app_name }}"
@@ -80,7 +80,7 @@
       resource: dc
       key: SPRING_CONFIG_LOCATION
       value: /data/application.properties
-      state: present
+      state: absent
   - name: Setup git
     github_hooks:
       action: create
