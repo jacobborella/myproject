@@ -62,7 +62,7 @@
       namespace: "{{ app_namespace }}"
       resource: dc
       key: HAT_COLOR
-      value: Red
+      value: Yellow
       state: present
   - name: Mount secret application.properties for application
     oc_volume:
