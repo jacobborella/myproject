@@ -200,7 +200,7 @@
             },
             "spec": {
                 "strategy": {
-                    "type": "Recreate"
+                    "type": "Rolling"
                 },
                 "triggers": [
                     {
@@ -257,7 +257,19 @@
                                         "containerPort": 8443,
                                         "protocol": "TCP"
                                     }
-                                ]
+                                ],
+                                "readinessProbe": {
+                                    "failureThreshold": 3,
+                                    "httpGet": {
+                                        "path": "/",
+                                        "port": 8080,
+                                        "scheme": "HTTP"
+                                    },
+                                    "initialDelaySeconds": 4,
+                                    "periodSeconds": 1,
+                                    "successThreshold": 1,
+                                    "timeoutSeconds": 30
+                                }
                             }
                         ]
                     }
