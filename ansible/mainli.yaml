@@ -5,7 +5,7 @@
   vars:
     ansible_ssh_user: jborella
     app_name: hello-world
-    app_namespace: ansibledemo
+    app_namespace: demo
     gituser: jacobborella
   tasks:
   - name: Create project
@@ -62,7 +62,7 @@
       namespace: "{{ app_namespace }}"
       resource: dc
       key: HAT_COLOR
-      value: Yellow
+      value: Red
       state: present
   - name: Mount secret application.properties for application
     oc_volume:
