@@ -1,4 +1,4 @@
 [DockerConDemo]
-li1645-194.members.linode.com
+#li1645-194.members.linode.com
 #192.168.99.100
-#rhdconhamaster.northeurope.cloudapp.azure.com
+dockercon.northeurope.cloudapp.azure.com
