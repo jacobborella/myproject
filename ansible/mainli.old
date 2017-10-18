@@ -1,9 +1,9 @@
 ---
 # mangler login
 - hosts: DockerConDemo
-  remote_user: mglantz
+  remote_user: jborella
   vars:
-    ansible_ssh_user: mglantz
+    ansible_ssh_user: jborella
     app_name: hello-world
     app_namespace: demo
     gituser: jacobborella
@@ -11,23 +11,23 @@
   - name: Create project
     oc_project:
       name: "{{ app_namespace }}"
-      displayName: GOTO Ansible Demo
+      displayName: DockerCon Demo
       description: Demo of using Ansible for provisioning servers
       state: present
-#  - name: Create secret in the project
-#    block:
-#    - template:
-#        src: templates/secret.yaml
-#        dest: /tmp/secret.yaml
-#        mode: 0600
-#    - oc_template:
-#        namespace: "{{ app_namespace }}"
-#        filename: /tmp/secret.yaml
-#        state: present
-#    always:
-#    - file:
-#        path: /tmp/secret.yaml
-#        state: absent
+  - name: Create secret in the project
+    block:
+    - template:
+        src: templates/secret.yaml
+        dest: /tmp/secret.yaml
+        mode: 0600
+    - oc_template:
+        namespace: "{{ app_namespace }}"
+        filename: /tmp/secret.yaml
+        state: absent
+    always:
+    - file:
+        path: /tmp/secret.yaml
+        state: absent
   - name: Create pipeline template file
     template:
       src: templates/pipeline.yaml
@@ -56,31 +56,31 @@
       template: openjdk18-web-basic-s2i
       template-parameters: SOURCE_REPOSITORY_URL=https://github.com/jacobborella/myproject.git,CONTEXT_DIR=,APPLICATION_NAME=hello-world
       state: present
-#  - name: Set environment variable
-#    oc_env:
-#      name: "{{ app_name }}"
-#      namespace: "{{ app_namespace }}"
-#      resource: dc
-#      key: HAT_COLOR
-#      value: Yellow
-#      state: present
-#  - name: Mount secret application.properties for application
-#    oc_volume:
-#      name: "{{ app_name }}"
-#      namespace: "{{ app_namespace }}"
-#      resource: dc
-#      vol-name: "vol01"
-#      secret-name: "test-secret"
-#      mount-path: "/data"
-#      state: absent
-#  - name: Set environment variable
-#    oc_env:
-#      name: "{{ app_name }}"
-#      namespace: "{{ app_namespace }}"
-#      resource: dc
-#      key: SPRING_CONFIG_LOCATION
-#      value: /data/application.properties
-#      state: absent
+  - name: Set environment variable
+    oc_env:
+      name: "{{ app_name }}"
+      namespace: "{{ app_namespace }}"
+      resource: dc
+      key: HAT_COLOR
+      value: Yellow
+      state: present
+  - name: Mount secret application.properties for application
+    oc_volume:
+      name: "{{ app_name }}"
+      namespace: "{{ app_namespace }}"
+      resource: dc
+      vol-name: "vol01"
+      secret-name: "test-secret"
+      mount-path: "/data"
+      state: absent
+  - name: Set environment variable
+    oc_env:
+      name: "{{ app_name }}"
+      namespace: "{{ app_namespace }}"
+      resource: dc
+      key: SPRING_CONFIG_LOCATION
+      value: /data/application.properties
+      state: absent
   - name: Setup git
     github_hooks:
       action: create
