@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @EnableAutoConfiguration
 public class Example {
 	
-	@Value("${HAT_COLOR:Red}")
+	@Value("${HAT_COLOR:Yellow}")
 	private String hatColor;
 	
 	@RequestMapping("/")
@@ -26,7 +26,7 @@ public class Example {
 		} catch(Exception e) {
 			
 		}
-		return "Hello " + hatColor + " Hat (from " + serverAddress + ")!!";
+		return "Hello " + hatColor + " Hat (from " + serverAddress + ")!";
 	}
 		
     @RequestMapping(value = "/img", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
