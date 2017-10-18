@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.net.InetAddress;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,12 +15,18 @@ import org.springframework.web.bind.annotation.*;
 @EnableAutoConfiguration
 public class Example {
 	
-	@Value("${HAT_COLOR:Red}")
+	@Value("${HAT_COLOR:Yellow}")
 	private String hatColor;
-
+	
 	@RequestMapping("/")
 	public String home() {
-		return "Hello " + hatColor + " Hat!!";
+		String serverAddress = "unknown";
+		try {
+			serverAddress = InetAddress.getLocalHost().getHostName();
+		} catch(Exception e) {
+			
+		}
+		return "Hello " + hatColor + " Hat (from " + serverAddress + ")!!";
 	}
 		
     @RequestMapping(value = "/img", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
