@@ -19,7 +19,7 @@ public class Example {
 
 	@RequestMapping("/")
 	public String home() {
-		return "Hello " + hatColor + " Hat!";
+		return "Hello " + hatColor + " Hat!!";
 	}
 		
     @RequestMapping(value = "/img", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
