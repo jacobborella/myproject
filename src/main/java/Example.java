@@ -26,7 +26,7 @@ public class Example {
 		} catch(Exception e) {
 			
 		}
-		return "Hello " + hatColor + " Hat (from " + serverAddress + ")!!";
+		return "Hello " + hatColor + " Hat (from " + serverAddress + ")!! (new version)";
 	}
 		
     @RequestMapping(value = "/img", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
