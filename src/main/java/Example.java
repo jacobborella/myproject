@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @EnableAutoConfiguration
 public class Example {
 	
-	@Value("${HAT_COLOR:Red}")
+	@Value("${HAT_COLOR:Purple}")
 	private String hatColor;
 	
 	@RequestMapping("/")
